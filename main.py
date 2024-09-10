@@ -268,6 +268,7 @@ def run(
     list_of_dataloaders = methods["get_dataloaders"](seed, test)
 
     device = utils.set_torch_device(gpu)
+    print(device)
 
     result_collect = []
     data = {'Class': [], 'Distribution': [], 'Foreground': []}
