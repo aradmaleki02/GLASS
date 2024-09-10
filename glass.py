@@ -249,7 +249,7 @@ class GLASS(torch.nn.Module):
         pbar = tqdm.tqdm(range(self.meta_epochs), unit='epoch')
         pbar_str1 = ""
         best_record = None
-        print(training_data)
+        print('lol', len(training_data))
         for i_epoch in pbar:
             self.forward_modules.eval()
             with torch.no_grad():  # compute center
