@@ -191,7 +191,7 @@ class MVTecDataset(torch.utils.data.Dataset):
                 self.class_fg = 0
 
             if self.class_fg:
-                fgmask_path = image_path.split(classname)[0] + 'fg_mask/' + classname + '/' + os.path.split(image_path)[-1]
+                fgmask_path = '/kaggle/working/GLASS/All_fg_mask/MVTec AD/fg_mask/' + classname + '/' + os.path.split(image_path)[-1]
                 mask_fg = PIL.Image.open(fgmask_path)
                 mask_fg = torch.ceil(self.transform_mask(mask_fg)[0])
 
