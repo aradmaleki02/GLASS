@@ -109,7 +109,8 @@ class MVTecDataset(torch.utils.data.Dataset):
         self.anomaly_source_paths = sorted(1 * glob.glob(anomaly_source_path + "/*/*.jpg") +
                                            0 * list(next(iter(self.imgpaths_per_class.values())).values())[0])
         print('!!!')
-        print(self.anomaly_source_paths)
+        print(anomaly_source_path)
+        print(len(glob.glob(anomaly_source_path + "/*/*.jpg")))
 
         self.transform_img = [
             transforms.Resize(self.resize),
