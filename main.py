@@ -189,7 +189,7 @@ def dataset(
 
     def get_dataloaders(seed, test, get_name=name):
         dataloaders = []
-        for subdataset in subdatasets:
+        for subdataset in CLASSNAMES:
             test_dataset = dataset_library.__dict__[dataset_info[1]](
                 data_path,
                 aug_path,
