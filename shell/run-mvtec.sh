@@ -31,7 +31,7 @@ python main.py \
     --distribution 0 \
     --mean 0.5 \
     --std 0.1 \
-    --fg 1 \
+    --fg 0 \
     --rand_aug 1 \
     --batch_size 20 \
     --resize 288 \
