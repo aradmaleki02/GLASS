@@ -202,7 +202,8 @@ class GLASS(torch.nn.Module):
                     k: v.detach().cpu()
                     for k, v in self.pre_projection.state_dict().items()})
 
-        self.distribution = training_data.dataset.distribution
+        # self.distribution = training_data.dataset.distribution
+        self.distribution = 0
         xlsx_path = './datasets/excel/' + name.split('_')[0] + '_distribution.xlsx'
         try:
             if self.distribution == 1:  # rejudge by image-level spectrogram analysis
