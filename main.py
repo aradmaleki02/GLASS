@@ -182,6 +182,8 @@ def dataset(
                 seed=seed,
             )
 
+            print('type', type(test_dataset))
+
             test_dataloader = torch.utils.data.DataLoader(
                 test_dataset,
                 batch_size=batch_size,
