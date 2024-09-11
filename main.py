@@ -328,7 +328,7 @@ def run(
                 print('flag:', flag)
                 if type(flag) == int:
                     row_dist = {'Class': dataloaders["training"].name, 'Distribution': flag, 'Foreground': flag}
-                    df = df.append(row_dist, ignore_index=True)
+                    df = df._append(row_dist, ignore_index=True)
 
             if type(flag) != int:
                 i_auroc, i_ap, p_auroc, p_ap, p_pro, epoch = GLASS.tester(dataloaders["testing"], dataset_name)
