@@ -189,10 +189,8 @@ def dataset(
 
     def get_dataloaders(seed, test, get_name=name):
         dataloaders = []
-        test_dataset = []
-        train_dataset = []
-        for subdataset in CLASSNAMES:
-            test_dataset.append(dataset_library.__dict__[dataset_info[1]](
+        for subdataset in subdatasets:
+            test_dataset = dataset_library.__dict__[dataset_info[1]](
                 data_path,
                 aug_path,
                 classname=subdataset,
@@ -200,10 +198,23 @@ def dataset(
                 imagesize=imagesize,
                 split=dataset_library.DatasetSplit.TEST,
                 seed=seed,
-            ))
+            )
+
+            # print('type', type(test_dataset))
+
+            test_dataloader = torch.utils.data.DataLoader(
+                test_dataset,
+                batch_size=batch_size,
+                shuffle=False,
+                num_workers=num_workers,
+                prefetch_factor=2,
+                pin_memory=True,
+            )
+
+            test_dataloader.name = get_name + "_" + subdataset
 
             if test == 'ckpt':
-                train_dataset.append(dataset_library.__dict__[dataset_info[1]](
+                train_dataset = dataset_library.__dict__[dataset_info[1]](
                     data_path,
                     aug_path,
                     dataset_name=get_name,
@@ -228,45 +239,30 @@ def dataset(
                     rand_aug=rand_aug,
                     augment=augment,
                     batch_size=batch_size,
-                ))
+                )
 
-        test_dataset = torch.utils.data.ConcatDataset(test_dataset)
-        test_dataloader = torch.utils.data.DataLoader(
-            test_dataset,
-            batch_size=batch_size,
-            shuffle=False,
-            num_workers=num_workers,
-            prefetch_factor=2,
-            pin_memory=True,
-        )
-        test_dataloader.name = get_name + "_high_var"
+                train_dataloader = torch.utils.data.DataLoader(
+                    train_dataset,
+                    batch_size=batch_size,
+                    shuffle=True,
+                    num_workers=num_workers,
+                    prefetch_factor=2,
+                    pin_memory=True,
+                )
 
+                train_dataloader.name = test_dataloader.name
+                LOGGER.info(f"Dataset {subdataset.upper():^20}: train={len(train_dataset)} test={len(test_dataset)}")
+            else:
+                train_dataloader = test_dataloader
+                LOGGER.info(f"Dataset {subdataset.upper():^20}: train={0} test={len(test_dataset)}")
 
-        if test == 'ckpt':
-            train_dataset = torch.utils.data.ConcatDataset(train_dataset)
-            train_dataloader = torch.utils.data.DataLoader(
-                train_dataset,
-                batch_size=batch_size,
-                shuffle=True,
-                num_workers=num_workers,
-                prefetch_factor=2,
-                pin_memory=True,
-            )
+            dataloader_dict = {
+                "training": train_dataloader,
+                "testing": test_dataloader,
+            }
+            dataloaders.append(dataloader_dict)
 
-            train_dataloader.name = test_dataloader.name
-            LOGGER.info(f"Dataset {subdataset.upper():^20}: train={len(train_dataset)} test={len(test_dataset)}")
-        else:
-            train_dataloader = test_dataloader
-            LOGGER.info(f"Dataset {subdataset.upper():^20}: train={0} test={len(test_dataset)}")
-
-        dataloader_dict = {
-            "training": train_dataloader,
-            "testing": test_dataloader,
-        }
-        dataloaders.append(dataloader_dict)
-
-        print('len(train_dataset):', len(train_dataset), 'len(test_dataset):', len(test_dataset))
-        print('len(train_dataloader):', len(train_dataloader), 'len(test_dataloader):', len(test_dataloader))
+        print("\n")
         return dataloaders
 
     return "get_dataloaders", get_dataloaders
@@ -325,6 +321,7 @@ def run(
             GLASS.set_model_dir(os.path.join(models_dir, f"backbone_{i}"), dataset_name)
             if test == 'ckpt':
                 flag = GLASS.trainer(dataloaders["training"], dataloaders["testing"], dataset_name)
+                print('flag:', flag)
                 if type(flag) == int:
                     row_dist = {'Class': dataloaders["training"].name, 'Distribution': flag, 'Foreground': flag}
                     df = df.append(row_dist, ignore_index=True)
