@@ -1,7 +1,7 @@
 datapath=/kaggle/input/mvtec-ad
 augpath=/kaggle/input/describable-textures-dataset-dtd/dtd/images
 #classes=('carpet' 'grid' 'leather' 'tile' 'wood' 'bottle' 'cable' 'capsule' 'hazelnut' 'metal_nut' 'pill' 'screw' 'toothbrush' 'transistor' 'zipper')
-classes=('carpet' 'grid' 'leather')
+classes=('shoombool')
 flags=($(for class in "${classes[@]}"; do echo '-d '"${class}"; done))
 
 cd ..
@@ -16,7 +16,7 @@ python main.py \
     --pretrain_embed_dimension 1536 \
     --target_embed_dimension 1536 \
     --patchsize 3 \
-    --meta_epochs 5 \
+    --meta_epochs 1 \
     --eval_epochs 1 \
     --dsc_layers 2 \
     --dsc_hidden 1024 \
