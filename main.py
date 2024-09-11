@@ -299,6 +299,7 @@ def run(
     for dataloader_count, dataloaders in enumerate(list_of_dataloaders):
         utils.fix_seeds(seed, device)
         dataset_name = dataloaders["training"].name
+        print(dataloaders["training"].dataset)
         imagesize = dataloaders["training"].dataset.imagesize
         glass_list = methods["get_glass"](imagesize, device)
 
