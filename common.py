@@ -128,6 +128,7 @@ class NetworkFeatureAggregator(torch.nn.Module):
 
     def feature_dimensions(self, input_shape):
         """Computes the feature dimensions for all layers given input_shape."""
+        print(input_shape)
         _input = torch.ones([1] + list(input_shape)).to(self.device)
         _output = self(_input)
         return [_output[layer].shape[1] for layer in self.layers_to_extract_from]
