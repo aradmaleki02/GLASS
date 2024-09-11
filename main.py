@@ -191,6 +191,7 @@ def dataset(
         dataloaders = []
         test_dataset = []
         train_dataset = []
+        print(subdatasets)
         for subdataset in CLASSNAMES:
             test_dataset.append(dataset_library.__dict__[dataset_info[1]](
                 data_path,
@@ -301,8 +302,8 @@ def run(
         utils.fix_seeds(seed, device)
         dataset_name = dataloaders["training"].name
         # print(dataloaders["training"].dataset[0])
-        # imagesize = dataloaders["training"].dataset.imagesize
-        imagesize = 288
+        imagesize = dataloaders["training"].dataset.imagesize
+        print(imagesize)
         glass_list = methods["get_glass"](imagesize, device)
 
         LOGGER.info(
