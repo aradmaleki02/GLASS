@@ -266,6 +266,7 @@ def dataset(
         dataloaders.append(dataloader_dict)
 
         print('len(train_dataset):', len(train_dataset), 'len(test_dataset):', len(test_dataset))
+        print('len(train_dataloader):', len(train_dataloader), 'len(test_dataloader):', len(test_dataloader))
         return dataloaders
 
     return "get_dataloaders", get_dataloaders
@@ -299,7 +300,7 @@ def run(
     for dataloader_count, dataloaders in enumerate(list_of_dataloaders):
         utils.fix_seeds(seed, device)
         dataset_name = dataloaders["training"].name
-        print(dataloaders["training"].dataset)
+        print(dataloaders["training"])
         imagesize = dataloaders["training"].dataset.imagesize
         glass_list = methods["get_glass"](imagesize, device)
 
